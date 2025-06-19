@@ -1,0 +1,479 @@
+/* Custom Styles for EduQuest App */
+
+/* Global styles and overrides */
+body {
+    font-family: 'Inter', sans-serif;
+    /* Tailwind's bg-gray-100 and flex h-screen are already on the body */
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-fade-in {
+    animation: fadeIn 0.5s ease-out forwards;
+}
+
+/* Sidebar Specific Styles for Responsiveness */
+@media (max-width: 767px) {
+    #sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        width: 250px; /* Adjust as needed */
+        z-index: 50; /* Ensure it's above other content */
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.4);
+    }
+
+    #sidebar.open {
+        transform: translateX(0);
+    }
+
+    #main-content {
+        filter: blur(2px); /* Blur content when sidebar is open */
+        pointer-events: none; /* Prevent interaction with main content */
+    }
+
+    #sidebar-toggle-open {
+        display: block; /* Show on mobile */
+    }
+
+    #sidebar-toggle-close {
+        display: block; /* Show on mobile */
+    }
+}
+
+@media (min-width: 768px) {
+    #sidebar {
+        transform: translateX(0); /* Always visible on desktop */
+    }
+
+    #sidebar-toggle-open {
+        display: none; /* Hide on desktop */
+    }
+}
+
+/* Navigation Button Active State */
+.nav-button.active {
+    background-color: #4A5568; /* Tailwind gray-700 equivalent */
+    font-weight: 600; /* semibold */
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Scrollbar Styling (Webkit Browsers) */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px; /* For horizontal scrollbars */
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+/* Specific styling for the avatar preview container in avatar view */
+#avatar-preview-container {
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    /* Placeholder for dynamic avatar background/layers */
+}
+
+#avatar-preview-container > i.fas.fa-user-circle {
+    /* Base icon for avatar, hidden when real parts are loaded */
+    font-size: 6rem; /* 6xl in Tailwind */
+    color: #9CA3AF; /* gray-400 */
+}
+
+/* Styles for avatar item thumbnails */
+.avatar-item-thumbnail {
+    width: 100%;
+    height: 80px;
+    background-color: #E5E7EB; /* gray-200 */
+    border: 2px solid transparent;
+    border-radius: 0.75rem; /* rounded-xl */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+}
+
+.avatar-item-thumbnail:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.avatar-item-thumbnail.selected {
+    border-color: #8B5CF6; /* purple-500 */
+    box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.5);
+}
+
+/* Style for shop item cards */
+.shop-item-card {
+    background-color: #fff;
+    padding: 1rem;
+    border-radius: 0.75rem; /* rounded-xl */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    transition: transform 0.2s ease-in-out;
+}
+
+.shop-item-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.shop-item-card .item-icon {
+    font-size: 3rem;
+    color: #6B7280; /* gray-500 */
+    margin-bottom: 0.5rem;
+}
+
+.shop-item-card .item-price {
+    font-size: 1.25rem;
+    font-weight: bold;
+    color: #FBBF24; /* yellow-400 */
+    display: flex;
+    align-items: center;
+    margin-top: 0.5rem;
+}
+
+.shop-item-card button {
+    margin-top: 1rem;
+    padding: 0.5rem 1rem;
+    background-color: #3B82F6; /* blue-500 */
+    color: white;
+    border-radius: 0.5rem;
+    transition: background-color 0.2s ease;
+}
+
+.shop-item-card button:hover {
+    background-color: #2563EB; /* blue-600 */
+}
+
+.shop-item-card button:disabled {
+    background-color: #9CA3AF; /* gray-400 */
+    cursor: not-allowed;
+}
+
+/* Calendar Day Styles */
+.calendar-day {
+    padding: 0.5rem;
+    border: 1px solid #E5E7EB; /* gray-200 */
+    border-radius: 0.5rem;
+    min-height: 100px; /* Ensure days have some height */
+    position: relative;
+    overflow: hidden;
+    background-color: #F9FAFB; /* gray-50 */
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.25rem;
+}
+
+.calendar-day.current-month {
+    background-color: #FFFFFF;
+}
+
+.calendar-day.today {
+    border-color: #8B5CF6; /* purple-500 */
+    box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.3);
+}
+
+.calendar-day.has-events {
+    background-color: #ECFDF5; /* green-50 */
+    border-color: #34D399; /* green-400 */
+}
+
+.calendar-day-number {
+    font-weight: bold;
+    font-size: 1.125rem;
+    color: #374151; /* gray-700 */
+}
+
+.calendar-event {
+    background-color: #6366F1; /* indigo-500 */
+    color: white;
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.375rem;
+    width: fit-content;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.calendar-event.quest-deadline {
+    background-color: #EF4444; /* red-500 */
+}
+
+.calendar-event.study-block {
+    background-color: #A78BFA; /* purple-400 */
+}
+
+/* Knowledge Tree Specific Styles */
+.skill-node {
+    position: absolute;
+    width: 100px; /* Fixed width for nodes */
+    height: 100px; /* Fixed height for nodes */
+    background-color: #E0F2F7; /* light blue */
+    border: 2px solid #29B6F6; /* blue */
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    transition: all 0.3s ease;
+    z-index: 10;
+}
+
+.skill-node:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+}
+
+.skill-node.unlocked {
+    background-color: #C8E6C9; /* light green */
+    border-color: #4CAF50; /* green */
+}
+
+.skill-node.active-skill {
+    background-color: #FFF3E0; /* light orange */
+    border-color: #FF9800; /* orange */
+}
+
+.skill-node.locked {
+    filter: grayscale(80%);
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+.skill-title {
+    font-weight: bold;
+    font-size: 0.9rem;
+    color: #333;
+}
+
+.skill-cost {
+    font-size: 0.8rem;
+    color: #555;
+}
+
+.skill-line {
+    position: absolute;
+    height: 2px;
+    background-color: #BDBDBD; /* grey */
+    z-index: 5;
+    transform-origin: 0 50%; /* Important for rotation */
+}
+
+.skill-line.unlocked-line {
+    background-color: #4CAF50; /* green */
+}
+
+/* Onboarding Highlight */
+#onboarding-highlight {
+    border: 3px solid #FACC15; /* yellow-400 */
+    box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.6); /* Creates the overlay effect */
+    transition: all 0.5s ease-in-out;
+}
+
+/* Dark Mode Specific Styles */
+body.dark-mode {
+    background-color: #1A202C; /* Tailwind gray-900 */
+}
+
+.dark-mode #app-container {
+    background: linear-gradient(to bottom right, #1a202c, #2d3748); /* Darker gradient */
+}
+
+.dark-mode #sidebar {
+    background-color: #2D3748; /* Tailwind gray-800 */
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.6);
+}
+
+.dark-mode #player-summary {
+    background-color: #4A5568; /* Tailwind gray-700 */
+}
+
+.dark-mode #avatar-display {
+    background-color: #64748B; /* gray-600 */
+    border-color: #FCD34D; /* yellow-300 */
+    color: #CBD5E0; /* gray-300 */
+}
+
+.dark-mode .nav-button {
+    color: #E2E8F0; /* gray-200 */
+}
+
+.dark-mode .nav-button:hover {
+    background-color: #4A5568; /* gray-700 */
+}
+
+.dark-mode .nav-button.active {
+    background-color: #4A5568;
+}
+
+.dark-mode #main-content .view {
+    background-color: #2D3748; /* Darker background for content areas */
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
+}
+
+.dark-mode h2, .dark-mode h3 {
+    color: #E2E8F0; /* Light text for headings */
+}
+
+.dark-mode p, .dark-mode ul, .dark-mode label {
+    color: #CBD5E0; /* Light text for paragraphs and labels */
+}
+
+.dark-mode input[type="text"],
+.dark-mode select {
+    background-color: #4A5568;
+    border-color: #64748B;
+    color: #E2E8F0;
+}
+
+.dark-mode .bg-blue-100 { background-color: #3182CE; border-color: #2B6CB0; color: #EBF8FF; } /* Darker blue */
+.dark-mode .bg-blue-200 { background-color: #2B6CB0; }
+.dark-mode .bg-blue-500 { background-color: #63B3ED; }
+
+.dark-mode .bg-yellow-100 { background-color: #D69E2E; border-color: #B7791F; color: #FFFBEB; } /* Darker yellow */
+.dark-mode .bg-yellow-200 { background-color: #B7791F; }
+.dark-mode .bg-yellow-600 { color: #F6AD55; }
+
+.dark-mode .bg-green-100 { background-color: #38A169; border-color: #2F855A; color: #EBFBEA; } /* Darker green */
+.dark-mode .bg-green-200 { background-color: #2F855A; }
+.dark-mode .bg-green-500 { background-color: #68D391; }
+
+.dark-mode .bg-purple-100 { background-color: #805AD5; border-color: #6B46C1; color: #EDE9FE; } /* Darker purple */
+.dark-mode .bg-purple-200 { background-color: #6B46C1; }
+.dark-mode .bg-purple-500 { background-color: #A78BFA; }
+
+.dark-mode .bg-indigo-100 { background-color: #5A67D8; border-color: #434190; color: #E0E7FF; } /* Darker indigo */
+.dark-mode .bg-indigo-200 { background-color: #434190; }
+
+.dark-mode .bg-red-100 { background-color: #E53E3E; border-color: #C53030; color: #FEE8E8; } /* Darker red */
+.dark-mode .bg-red-200 { background-color: #C53030; }
+.dark-mode .bg-red-500 { background-color: #FC8181; }
+
+
+.dark-mode #onboarding-modal,
+.dark-mode #confirmation-modal {
+    background-color: #2D3748;
+}
+
+.dark-mode #notification-box {
+    background-color: #4A5568;
+    color: #E2E8F0;
+}
+
+.dark-mode .shop-item-card {
+    background-color: #4A5568;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.4);
+}
+
+.dark-mode .shop-item-card .item-icon {
+    color: #A0AEC0;
+}
+
+.dark-mode .shop-item-card .item-price {
+    color: #FCD34D;
+}
+
+.dark-mode .calendar-day {
+    background-color: #4A5568;
+    border-color: #64748B;
+}
+
+.dark-mode .calendar-day.current-month {
+    background-color: #2D3748;
+}
+
+.dark-mode .calendar-day.today {
+    border-color: #A78BFA;
+    box-shadow: 0 0 0 2px rgba(167, 139, 250, 0.3);
+}
+
+.dark-mode .calendar-day.has-events {
+    background-color: #38A169;
+    border-color: #2F855A;
+}
+
+.dark-mode .calendar-day-number {
+    color: #E2E8F0;
+}
+
+.dark-mode .skill-node {
+    background-color: #4299E1; /* Tailwind blue-500 */
+    border-color: #3182CE; /* Tailwind blue-600 */
+    color: #EBF8FF;
+}
+.dark-mode .skill-node.unlocked {
+    background-color: #48BB78; /* Tailwind green-500 */
+    border-color: #38A169; /* Tailwind green-600 */
+}
+.dark-mode .skill-node.active-skill {
+    background-color: #ED8936; /* Tailwind orange-500 */
+    border-color: #DD6B20; /* Tailwind orange-600 */
+}
+.dark-mode .skill-node.locked {
+    filter: grayscale(50%);
+    opacity: 0.6;
+}
+.dark-mode .skill-title {
+    color: #E2E8F0;
+}
+.dark-mode .skill-cost {
+    color: #CBD5E0;
+}
+.dark-mode .skill-line {
+    background-color: #A0AEC0; /* Tailwind gray-400 */
+}
+.dark-mode .skill-line.unlocked-line {
+    background-color: #48BB78; /* Tailwind green-500 */
+}
+
+/* General button styles for better appearance */
+button {
+    cursor: pointer;
+    outline: none;
+}
+
+/* Hide scrollbar for specific elements if needed, but allow content to be scrollable */
+.overflow-auto::-webkit-scrollbar,
+.overflow-y-auto::-webkit-scrollbar {
+    display: none;
+}
+.overflow-auto,
+.overflow-y-auto {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+}
