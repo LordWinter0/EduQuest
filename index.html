@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduQuest: The Learning RPG</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts - Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="font-inter bg-gray-100 flex h-screen overflow-hidden transition-colors duration-300">
+
+    <!-- Main App Container -->
+    <div id="app-container" class="flex flex-1 relative bg-gradient-to-br from-blue-600 to-purple-700">
+
+        <!-- Sidebar / Navigation -->
+        <aside id="sidebar" class="w-64 bg-gray-800 text-white flex flex-col p-4 shadow-lg z-20 transition-all duration-300 transform -translate-x-full md:translate-x-0 md:relative">
+            <div class="flex items-center mb-6 justify-between md:justify-center">
+                <h1 class="text-3xl font-bold text-yellow-400">EduQuest</h1>
+                <button id="sidebar-toggle-close" class="md:hidden text-white text-2xl ml-4">&times;</button>
+            </div>
+
+            <!-- Player Profile Summary -->
+            <div id="player-summary" class="bg-gray-700 p-4 rounded-xl shadow-md mb-6 text-center">
+                <div id="avatar-display" class="w-20 h-20 bg-gray-600 rounded-full mx-auto mb-2 flex items-center justify-center text-3xl text-gray-400 border-2 border-yellow-400 overflow-hidden">
+                    <!-- Avatar will be dynamically rendered here -->
+                    <i class="fas fa-user-circle"></i>
+                </div>
+                <h2 id="player-name" class="text-xl font-semibold mb-1">Scholar Name</h2>
+                <div class="text-sm">
+                    Level <span id="player-level">1</span>
+                </div>
+                <div class="w-full bg-gray-600 rounded-full h-2.5 mt-2">
+                    <div id="xp-bar" class="bg-green-500 h-2.5 rounded-full" style="width: 0%;"></div>
+                </div>
+                <div class="text-xs text-gray-400 mt-1"><span id="current-xp">0</span> / <span id="next-level-xp">100</span> XP</div>
+                <div class="text-lg font-bold text-yellow-300 mt-2">
+                    <i class="fas fa-gem mr-1"></i> <span id="player-gold">0</span>
+                </div>
+            </div>
+
+            <!-- Navigation Links -->
+            <nav class="flex-1">
+                <ul>
+                    <li class="mb-2">
+                        <button class="nav-button active w-full text-left py-2 px-4 rounded-xl flex items-center hover:bg-gray-700 transition-colors duration-200" data-view="dashboard">
+                            <i class="fas fa-tachometer-alt mr-3"></i> Dashboard
+                        </button>
+                    </li>
+                    <li class="mb-2">
+                        <button class="nav-button w-full text-left py-2 px-4 rounded-xl flex items-center hover:bg-gray-700 transition-colors duration-200" data-view="quests">
+                            <i class="fas fa-scroll mr-3"></i> Quest Log
+                        </button>
+                    </li>
+                    <li class="mb-2">
+                        <button class="nav-button w-full text-left py-2 px-4 rounded-xl flex items-center hover:bg-gray-700 transition-colors duration-200" data-view="shop">
+                            <i class="fas fa-store mr-3"></i> Scholar's Emporium
+                        </button>
+                    </li>
+                    <li class="mb-2">
+                        <button class="nav-button w-full text-left py-2 px-4 rounded-xl flex items-center hover:bg-gray-700 transition-colors duration-200" data-view="calendar">
+                            <i class="fas fa-calendar-alt mr-3"></i> Calendar
+                        </button>
+                    </li>
+                    <li class="mb-2">
+                        <button class="nav-button w-full text-left py-2 px-4 rounded-xl flex items-center hover:bg-gray-700 transition-colors duration-200" data-view="avatar">
+                            <i class="fas fa-user-cog mr-3"></i> Avatar
+                        </button>
+                    </li>
+                     <li class="mb-2">
+                        <button class="nav-button w-full text-left py-2 px-4 rounded-xl flex items-center hover:bg-gray-700 transition-colors duration-200" data-view="knowledge-tree">
+                            <i class="fas fa-brain mr-3"></i> Knowledge Tree
+                        </button>
+                    </li>
+                    <li class="mb-2">
+                        <button class="nav-button w-full text-left py-2 px-4 rounded-xl flex items-center hover:bg-gray-700 transition-colors duration-200" data-view="settings">
+                            <i class="fas fa-cog mr-3"></i> Settings
+                        </button>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main id="main-content" class="flex-1 p-6 overflow-auto relative z-10">
+            <!-- Sidebar Toggle Button for mobile -->
+            <button id="sidebar-toggle-open" class="md:hidden absolute top-4 left-4 bg-gray-800 text-white p-2 rounded-lg shadow-md z-30">
+                <i class="fas fa-bars"></i>
+            </button>
+
+            <!-- Dashboard View -->
+            <section id="dashboard-view" class="view active-view bg-white p-6 rounded-xl shadow-2xl animate-fade-in">
+                <h2 class="text-3xl font-extrabold text-gray-800 mb-6">Dashboard</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- XP & Level Card -->
+                    <div class="bg-blue-100 p-5 rounded-xl shadow-md border border-blue-200">
+                        <h3 class="text-xl font-semibold text-blue-800 mb-2">Current Progress</h3>
+                        <p class="text-gray-700">Level: <span id="dashboard-level" class="font-bold">1</span></p>
+                        <p class="text-gray-700">XP: <span id="dashboard-xp" class="font-bold">0</span> / <span id="dashboard-next-xp" class="font-bold">100</span></p>
+                        <div class="w-full bg-blue-200 rounded-full h-3 mt-3">
+                            <div id="dashboard-xp-bar" class="bg-blue-500 h-3 rounded-full transition-all duration-500" style="width: 0%;"></div>
+                        </div>
+                    </div>
+                    <!-- Gold Card -->
+                    <div class="bg-yellow-100 p-5 rounded-xl shadow-md border border-yellow-200">
+                        <h3 class="text-xl font-semibold text-yellow-800 mb-2">Knowledge Gems</h3>
+                        <p class="text-3xl font-bold text-yellow-600"><i class="fas fa-gem mr-2"></i><span id="dashboard-gold">0</span></p>
+                    </div>
+                    <!-- Active Quests Card -->
+                    <div class="bg-green-100 p-5 rounded-xl shadow-md border border-green-200">
+                        <h3 class="text-xl font-semibold text-green-800 mb-2">Active Quests</h3>
+                        <ul id="dashboard-active-quests" class="list-disc pl-5 text-gray-700">
+                            <!-- Active quests will be dynamically added here -->
+                            <li>No active quests. Visit Quest Log!</li>
+                        </ul>
+                        <button class="mt-4 px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors" onclick="uiManager.showView('quests')">Go to Quest Log</button>
+                    </div>
+                    <!-- Stats Overview -->
+                    <div class="bg-purple-100 p-5 rounded-xl shadow-md border border-purple-200 col-span-1 md:col-span-2 lg:col-span-1">
+                        <h3 class="text-xl font-semibold text-purple-800 mb-2">Subject Mastery (XP)</h3>
+                        <ul id="dashboard-stats-list" class="space-y-2">
+                            <!-- Stats will be dynamically added here -->
+                        </ul>
+                    </div>
+                    <!-- Recent Achievements Card -->
+                    <div class="bg-indigo-100 p-5 rounded-xl shadow-md border border-indigo-200 col-span-1 md:col-span-2 lg:col-span-1">
+                        <h3 class="text-xl font-semibold text-indigo-800 mb-2">Recent Achievements</h3>
+                        <ul id="dashboard-achievements" class="list-disc pl-5 text-gray-700">
+                            <!-- Recent achievements will be dynamically added here -->
+                            <li>No achievements yet!</li>
+                        </ul>
+                    </div>
+                    <!-- Discipline/Focus Meter -->
+                     <div class="bg-red-100 p-5 rounded-xl shadow-md border border-red-200">
+                        <h3 class="text-xl font-semibold text-red-800 mb-2">Focus Meter</h3>
+                        <p class="text-gray-700"><span id="focus-current">100</span> / <span id="focus-max">100</span></p>
+                        <div class="w-full bg-red-200 rounded-full h-3 mt-3">
+                            <div id="focus-bar" class="bg-red-500 h-3 rounded-full transition-all duration-500" style="width: 100%;"></div>
+                        </div>
+                        <p class="text-sm text-gray-500 mt-2">Repletes over time. Use it wisely!</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Quest Log View -->
+            <section id="quests-view" class="view hidden bg-white p-6 rounded-xl shadow-2xl animate-fade-in">
+                <h2 class="text-3xl font-extrabold text-gray-800 mb-6">Quest Log</h2>
+                <div class="flex flex-col md:flex-row gap-4 mb-6">
+                    <div class="flex-1">
+                        <label for="quest-filter" class="block text-gray-700 text-sm font-bold mb-2">Filter Quests:</label>
+                        <select id="quest-filter" class="shadow appearance-none border rounded-xl w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                            <option value="all">All Quests</option>
+                            <option value="active">Active</option>
+                            <option value="completed">Completed</option>
+                            <option value="daily">Daily</option>
+                            <option value="main">Main</option>
+                            <option value="side">Side</option>
+                        </select>
+                    </div>
+                    <div class="flex-1">
+                        <label for="quest-sort" class="block text-gray-700 text-sm font-bold mb-2">Sort By:</label>
+                        <select id="quest-sort" class="shadow appearance-none border rounded-xl w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                            <option value="dueDate">Due Date</option>
+                            <option value="subject">Subject</option>
+                            <option value="xpReward">XP Reward</option>
+                            <option value="goldReward">Gold Reward</option>
+                        </select>
+                    </div>
+                </div>
+                <div id="quest-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <!-- Quests will be dynamically loaded here -->
+                    <div class="bg-gray-100 p-4 rounded-xl shadow-md text-gray-600 text-center">No quests to display.</div>
+                </div>
+            </section>
+
+            <!-- Shop View -->
+            <section id="shop-view" class="view hidden bg-white p-6 rounded-xl shadow-2xl animate-fade-in">
+                <h2 class="text-3xl font-extrabold text-gray-800 mb-6">Scholar's Emporium</h2>
+                <div class="flex justify-between items-center mb-6">
+                    <span class="text-xl font-bold text-yellow-600"><i class="fas fa-gem mr-2"></i><span id="shop-current-gold">0</span></span>
+                    <div class="text-sm text-gray-500">Limited Time Offers refresh in <span id="shop-timer"></span></div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Shop categories -->
+                    <div class="bg-blue-100 p-4 rounded-xl shadow-md border border-blue-200">
+                        <h3 class="text-xl font-semibold text-blue-800 mb-4">Avatar Gear</h3>
+                        <div id="shop-avatar-gear" class="grid grid-cols-2 gap-4">
+                            <!-- Avatar items will be dynamically loaded here -->
+                        </div>
+                    </div>
+                    <div class="bg-green-100 p-4 rounded-xl shadow-md border border-green-200">
+                        <h3 class="text-xl font-semibold text-green-800 mb-4">Power-Ups</h3>
+                        <div id="shop-power-ups" class="grid grid-cols-2 gap-4">
+                            <!-- Power-up items will be dynamically loaded here -->
+                        </div>
+                    </div>
+                    <div class="bg-yellow-100 p-4 rounded-xl shadow-md border border-yellow-200">
+                        <h3 class="text-xl font-semibold text-yellow-800 mb-4">Study Decorations</h3>
+                        <div id="shop-decorations" class="grid grid-cols-2 gap-4">
+                            <!-- Decoration items will be dynamically loaded here -->
+                        </div>
+                    </div>
+                    <div class="bg-purple-100 p-4 rounded-xl shadow-md border border-purple-200">
+                        <h3 class="text-xl font-semibold text-purple-800 mb-4">Blueprints</h3>
+                        <div id="shop-blueprints" class="grid grid-cols-2 gap-4">
+                            <!-- Blueprint items will be dynamically loaded here -->
+                        </div>
+                    </div>
+                    <div class="bg-red-100 p-4 rounded-xl shadow-md border border-red-200 col-span-full">
+                        <h3 class="text-xl font-semibold text-red-800 mb-4">Limited Time Offers</h3>
+                        <div id="shop-limited-offers" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <!-- Limited time offers will be dynamically loaded here -->
+                            <p class="text-gray-600">No special offers currently.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Calendar View -->
+            <section id="calendar-view" class="view hidden bg-white p-6 rounded-xl shadow-2xl animate-fade-in">
+                <h2 class="text-3xl font-extrabold text-gray-800 mb-6">Calendar</h2>
+                <div class="flex items-center justify-between mb-4">
+                    <button id="calendar-prev-month" class="px-3 py-1 bg-gray-200 rounded-lg hover:bg-gray-300 transition-colors"><i class="fas fa-chevron-left"></i></button>
+                    <h3 id="calendar-month-year" class="text-2xl font-semibold text-gray-700">June 2025</h3>
+                    <button id="calendar-next-month" class="px-3 py-1 bg-gray-200 rounded-lg hover:bg-gray-300 transition-colors"><i class="fas fa-chevron-right"></i></button>
+                </div>
+                <div class="grid grid-cols-7 text-center font-bold text-gray-600 mb-2">
+                    <div>Sun</div>
+                    <div>Mon</div>
+                    <div>Tue</div>
+                    <div>Wed</div>
+                    <div>Thu</div>
+                    <div>Fri</div>
+                    <div>Sat</div>
+                </div>
+                <div id="calendar-grid" class="grid grid-cols-7 gap-1 h-[60vh] overflow-y-auto">
+                    <!-- Calendar days will be dynamically loaded here -->
+                </div>
+                 <button id="add-study-block-btn" class="mt-6 px-5 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors shadow-md"><i class="fas fa-plus mr-2"></i>Add Study Block</button>
+            </section>
+
+            <!-- Avatar Customization View -->
+            <section id="avatar-view" class="view hidden bg-white p-6 rounded-xl shadow-2xl animate-fade-in flex flex-col md:flex-row">
+                <div class="md:w-1/2 flex flex-col items-center justify-center p-4">
+                    <h2 class="text-3xl font-extrabold text-gray-800 mb-6">Customize Avatar</h2>
+                    <div id="avatar-preview-container" class="w-64 h-64 bg-gray-200 rounded-full flex items-center justify-center text-6xl text-gray-500 mb-6 border-4 border-purple-400 overflow-hidden relative">
+                        <!-- Avatar parts will be layered here dynamically -->
+                        <i class="fas fa-user-circle absolute"></i>
+                    </div>
+                    <input type="text" id="avatar-name-input" class="w-full max-w-xs p-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 mb-4 text-center text-lg font-semibold" placeholder="Enter Scholar Name">
+                    <button id="save-avatar-name" class="px-6 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors shadow-md">Save Name</button>
+                </div>
+                <div class="md:w-1/2 p-4">
+                    <h3 class="text-2xl font-semibold text-gray-800 mb-4">Available Items</h3>
+                    <div id="avatar-category-tabs" class="flex flex-wrap gap-2 mb-4">
+                        <!-- Category tabs will be dynamically loaded here -->
+                    </div>
+                    <div id="avatar-item-list" class="grid grid-cols-3 gap-4 h-[calc(100vh-250px)] overflow-y-auto">
+                        <!-- Avatar items will be dynamically loaded here based on category -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Knowledge Tree View -->
+            <section id="knowledge-tree-view" class="view hidden bg-white p-6 rounded-xl shadow-2xl animate-fade-in">
+                <h2 class="text-3xl font-extrabold text-gray-800 mb-6">Knowledge Tree</h2>
+                <div class="flex flex-col md:flex-row gap-4">
+                    <div class="md:w-1/4 bg-gray-100 p-4 rounded-xl shadow-md border border-gray-200">
+                        <h3 class="text-xl font-semibold text-gray-800 mb-4">Skill Points: <span id="skill-points-display" class="text-purple-600 font-bold">0</span></h3>
+                        <p class="text-gray-700 mb-4">Allocate points to unlock powerful skills!</p>
+                        <button id="respec-skills-btn" class="w-full px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors shadow-md">Respec Skills (<span id="respec-cost">50</span> Gold)</button>
+                        <hr class="my-4">
+                        <h3 class="text-xl font-semibold text-gray-800 mb-4">Subject Trees</h3>
+                        <ul id="subject-tree-list">
+                            <!-- Subject list will be dynamically loaded -->
+                        </ul>
+                    </div>
+                    <div class="md:w-3/4 bg-gray-100 p-4 rounded-xl shadow-md border border-gray-200">
+                        <h3 class="text-xl font-semibold text-gray-800 mb-4">Selected Tree: <span id="selected-tree-name"></span></h3>
+                        <div id="skill-tree-diagram" class="relative overflow-auto h-[60vh] bg-white rounded-lg p-4">
+                            <!-- Skill tree nodes and lines will be dynamically rendered here -->
+                             <p class="text-gray-500 text-center py-10">Select a subject tree to view its skills.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Settings View -->
+            <section id="settings-view" class="view hidden bg-white p-6 rounded-xl shadow-2xl animate-fade-in">
+                <h2 class="text-3xl font-extrabold text-gray-800 mb-6">Settings</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Theme Selection -->
+                    <div class="bg-blue-100 p-5 rounded-xl shadow-md border border-blue-200">
+                        <h3 class="text-xl font-semibold text-blue-800 mb-4">Visual Themes</h3>
+                        <div id="theme-selection" class="flex flex-wrap gap-3">
+                            <!-- Themes will be dynamically loaded here -->
+                        </div>
+                        <label class="flex items-center cursor-pointer mt-4">
+                            <input type="checkbox" id="dark-mode-toggle" class="sr-only peer">
+                            <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                            <span class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">Dark Mode</span>
+                        </label>
+                    </div>
+
+                    <!-- Sound Options -->
+                    <div class="bg-green-100 p-5 rounded-xl shadow-md border border-green-200">
+                        <h3 class="text-xl font-semibold text-green-800 mb-4">Sound Options</h3>
+                        <label class="block mb-2">
+                            <input type="checkbox" id="music-toggle" class="mr-2"> Enable Music
+                        </label>
+                        <label class="block mb-2">
+                            <input type="checkbox" id="sfx-toggle" class="mr-2"> Enable Sound Effects
+                        </label>
+                        <label for="music-volume" class="block text-gray-700 text-sm font-bold mb-2">Music Volume:</label>
+                        <input type="range" id="music-volume" min="0" max="100" value="50" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
+                        <label for="sfx-volume" class="block text-gray-700 text-sm font-bold mb-2 mt-4">SFX Volume:</label>
+                        <input type="range" id="sfx-volume" min="0" max="100" value="75" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
+                    </div>
+
+                    <!-- Gameplay Preferences -->
+                    <div class="bg-purple-100 p-5 rounded-xl shadow-md border border-purple-200">
+                        <h3 class="text-xl font-semibold text-purple-800 mb-4">Gameplay Preferences</h3>
+                        <label class="block mb-2">
+                            <input type="checkbox" id="due-date-reminders-toggle" class="mr-2" checked> Show Due Date Reminders
+                        </label>
+                        <label class="block mb-2">
+                            <input type="checkbox" id="performance-mode-toggle" class="mr-2"> Performance Mode (Disable heavy animations)
+                        </label>
+                        <label for="skill-auto-allocate" class="block text-gray-700 text-sm font-bold mb-2 mt-4">Skill Point Auto-Allocation:</label>
+                        <select id="skill-auto-allocate" class="shadow appearance-none border rounded-xl w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                            <option value="none">None</option>
+                            <option value="balanced">Balanced</option>
+                            <option value="math-focus">Math Focus</option>
+                            <option value="science-focus">Science Focus</option>
+                        </select>
+                    </div>
+
+                    <!-- Data Management -->
+                    <div class="bg-red-100 p-5 rounded-xl shadow-md border border-red-200 flex flex-col justify-between">
+                        <div>
+                            <h3 class="text-xl font-semibold text-red-800 mb-4">Data Management</h3>
+                            <p class="text-gray-700 mb-4">Be careful! This will erase all your game progress.</p>
+                        </div>
+                        <button id="reset-game-data-btn" class="px-6 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors shadow-md">Reset Game Data</button>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Onboarding Tour Overlay -->
+        <div id="onboarding-overlay" class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 hidden">
+            <div id="onboarding-modal" class="bg-white p-8 rounded-xl shadow-2xl max-w-2xl text-center relative">
+                <h3 id="onboarding-title" class="text-3xl font-extrabold text-gray-800 mb-4">Welcome, Young Scholar!</h3>
+                <p id="onboarding-text" class="text-gray-700 text-lg mb-6">Embark on an epic quest to master knowledge and become the ultimate scholar!</p>
+                <button id="onboarding-next-btn" class="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors shadow-md text-lg">Next <i class="fas fa-arrow-right ml-2"></i></button>
+                <div id="onboarding-highlight" class="absolute bg-yellow-400 opacity-50 rounded-xl transition-all duration-500 pointer-events-none z-50 hidden"></div>
+            </div>
+        </div>
+
+        <!-- Confirmation Modal (for reset data) -->
+        <div id="confirmation-modal" class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 hidden">
+            <div class="bg-white p-8 rounded-xl shadow-2xl max-w-sm text-center">
+                <h3 class="text-2xl font-bold text-gray-800 mb-4">Confirm Action</h3>
+                <p id="confirmation-message" class="text-gray-700 mb-6">Are you sure you want to reset all game data? This cannot be undone!</p>
+                <div class="flex justify-center gap-4">
+                    <button id="confirm-yes" class="px-6 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors shadow-md">Yes, Reset</button>
+                    <button id="confirm-no" class="px-6 py-2 bg-gray-300 text-gray-800 rounded-lg hover:bg-gray-400 transition-colors shadow-md">No, Cancel</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Notification/Message Box -->
+        <div id="notification-box" class="fixed bottom-4 right-4 bg-gray-900 text-white p-4 rounded-xl shadow-lg opacity-0 transition-opacity duration-300 z-40" style="min-width: 250px;">
+            <p id="notification-message" class="text-center"></p>
+        </div>
+
+    </div>
+
+    <!-- JavaScript Files -->
+    <script type="module" src="js/constants.js"></script>
+    <script type="module" src="js/themes.js"></script>
+    <script type="module" src="js/quests.js"></script>
+    <script type="module" src="js/shopItems.js"></script>
+    <script type="module" src="js/skills.js"></script>
+    <script type="module" src="js/avatars.js"></script>
+    <script type="module" src="js/battles.js"></script>
+    <script type="module" src="js/dataManager.js"></script>
+    <script type="module" src="js/uiManager.js"></script>
+    <script type="module" src="js/gameLogic.js"></script>
+    <script type="module" src="js/app.js"></script>
+</body>
+</html>
